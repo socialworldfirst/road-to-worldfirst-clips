@@ -1,0 +1,40 @@
+name: fetch-videos
+on:
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download clip mp4s from CDN
+        run: |
+          mkdir -p vid
+          base="https://d8j0ntlcm91z4.cloudfront.net/user_3DyqXhQW92do8vYiopD8GZlp3ZF"
+          while read k f; do
+            echo "fetching $k"
+            curl -sSL --retry 3 -o "vid/$k.mp4" "$base/$f"
+          done <<'EOF'
+          c01 hf_20260620_120955_51e63657-4366-4aac-9d75-ecce2b0caf6f.mp4
+          c02 hf_20260620_121033_30837748-3172-41e3-8b2e-c5c75d01058a.mp4
+          c03 hf_20260620_120959_f72eb81b-409c-4a37-a041-a5c6f1400375.mp4
+          c04 hf_20260620_121001_63b9120a-f2bc-4907-a8a0-3b69534e4d5d.mp4
+          c05 hf_20260620_121003_3a1a6eb6-81ff-484f-bfc8-f214beb16561.mp4
+          c06 hf_20260620_121005_c2ce53ea-451a-44e2-a7cc-89f1975d26a2.mp4
+          c07 hf_20260620_121007_a79eb637-0564-4948-8bb2-58394b120c21.mp4
+          c08 hf_20260620_121009_11cef312-ae62-4c01-b76e-514621967361.mp4
+          c09 hf_20260620_121143_bae91dd8-a31a-444b-88d9-b10c489265f1.mp4
+          c10 hf_20260620_121145_4bb03357-e12e-4a68-9c2e-2d0ce5a8db10.mp4
+          c11 hf_20260620_121212_b07e45cb-6dcf-452b-a6fd-0f615f7cc2dd.mp4
+          c12 hf_20260620_123300_394acadf-1ed2-43c4-8229-6244dc5ce3b4.mp4
+          EOF
+          ls -la vid
+          file vid/*.mp4
+      - name: Commit videos
+        run: |
+          git config user.name "github-actions"
+          git config user.email "actions@github.com"
+          git add vid
+          git commit -m "Fetch 12 clip mp4s from CDN" || echo "no changes"
+          git push
