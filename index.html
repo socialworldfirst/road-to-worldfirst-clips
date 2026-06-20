@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>The Road to WorldFirst — 5 to 10s Clips</title>
+<style>
+  :root{--ink:#16181d;--ink2:#3c4148;--mut:#71777f;--faint:#9aa0a6;--line:#e7e7e4;--bg:#fbfbf9;--card:#fff;--ok:#3f7d58;--accent:#16181d;--rec:#b07a2b;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);padding-bottom:128px;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:920px;margin:0 auto;padding:48px 24px 0}
+  h1{font-size:28px;letter-spacing:-.02em;font-weight:650;margin-bottom:8px}
+  .lede{color:var(--ink2);font-size:15.5px;max-width:68ch;margin-bottom:6px}
+  .lede b{color:var(--ink);font-weight:600}
+  .stamp{color:var(--faint);font-size:12.5px;margin-bottom:8px}
+  .spine{border:1px solid var(--line);background:#fff;border-radius:12px;padding:14px 16px;margin:18px 0 4px;font-size:13.5px;color:var(--ink2)}
+  .spine b{color:var(--ink)}
+  h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);font-weight:650;margin:42px 0 4px;display:flex;align-items:baseline;gap:10px}
+  .ct{font-size:12px;color:var(--faint);letter-spacing:.02em;text-transform:none;font-weight:500}
+  .ct.full{color:var(--ok)}
+  .sub{color:var(--mut);font-size:13.5px;margin-bottom:16px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-bottom:13px;cursor:pointer;transition:border-color .12s,box-shadow .12s;position:relative}
+  .card:hover{border-color:#cfd2cc}
+  .card.sel{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+  .thumb{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#eceae5;border-bottom:1px solid var(--line)}
+  .inner{padding:15px 17px}
+  .row{display:flex;gap:13px;align-items:flex-start}
+  .tick{flex:none;width:22px;height:22px;border-radius:6px;border:1.5px solid #c4c4bf;margin-top:2px;display:flex;align-items:center;justify-content:center;transition:.12s}
+  .tick svg{width:12px;height:12px;opacity:0;transition:.12s}
+  .card.sel .tick{background:var(--accent);border-color:var(--accent)}
+  .card.sel .tick svg{opacity:1}
+  .body{flex:1;min-width:0}
+  .name{font-weight:650;font-size:16px;letter-spacing:-.01em}
+  .name .rec{font-size:11px;color:var(--rec);font-weight:650;margin-left:8px}
+  .name .tag{font-size:11px;color:var(--ok);font-weight:650;margin-left:8px}
+  .meta{font-size:12px;color:var(--faint);font-family:ui-monospace,Menlo,monospace;margin:3px 0 9px}
+  .desc{font-size:13.5px;color:var(--ink2);line-height:1.55}
+  .desc p{margin:5px 0}
+  .desc b{color:var(--ink);font-weight:600}
+  .line{margin-top:9px;font-size:14px;font-style:italic;color:var(--ink);border-left:2px solid var(--accent);padding-left:11px}
+  .note{margin-top:12px;display:none}
+  .card.sel .note{display:block}
+  .note label{font-size:11px;text-transform:uppercase;letter-spacing:.06em;color:var(--faint);font-weight:600;display:block;margin-bottom:5px}
+  .note textarea{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:13px/1.45 inherit;resize:vertical;min-height:34px;color:var(--ink);background:#fcfcfa}
+  .note textarea:focus{outline:none;border-color:var(--mut)}
+  .global{margin-top:24px}
+  .global label{font-size:13px;color:var(--mut);font-weight:600;display:block;margin-bottom:7px}
+  .global textarea{width:100%;border:1px solid var(--line);border-radius:10px;padding:11px 13px;font:14px/1.5 inherit;resize:vertical;min-height:60px;background:var(--card)}
+  .global textarea:focus{outline:none;border-color:var(--mut)}
+  .bar{position:fixed;left:0;right:0;bottom:0;background:rgba(251,251,249,.92);backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:14px 24px}
+  .bar-in{max-width:920px;margin:0 auto;display:flex;align-items:center;gap:16px;justify-content:space-between}
+  .status{font-size:13px;color:var(--mut)} .status b{color:var(--ink)}
+  .btn{border:0;background:var(--ink);color:#fff;font:600 14px/1 inherit;padding:13px 22px;border-radius:10px;cursor:pointer;transition:.12s;white-space:nowrap}
+  .btn:disabled{background:#c8cdc6;cursor:not-allowed}
+  .btn.done{background:var(--ok)}
+  @media(max-width:620px){.wrap{padding:32px 16px 0}.bar-in{flex-direction:column;align-items:stretch;gap:10px}.btn{width:100%}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1 id="title"></h1>
+  <p class="lede" id="intro"></p>
+  <p class="stamp" id="stamp"></p>
+  <div class="spine" id="spine"></div>
+  <div id="sections"></div>
+  <div class="global" id="globalWrap" style="display:none">
+    <label id="gnoteLabel"></label>
+    <textarea id="gnote"></textarea>
+  </div>
+</div>
+<div class="bar"><div class="bar-in">
+  <div class="status" id="status"></div>
+  <button class="btn" id="copy" disabled>Copy prompt</button>
+</div></div>
+<script>
+/* === DECK START === */
+const DECK = {
+  title: "The Road to WorldFirst — 5 to 10s Clips",
+  intro: "Not the 60-second film. Twelve micro-clips built for 5 to 10 seconds each. At this length there is no journey, just one move: a football beat, the same shape as a seller's reality, then the name. One rhyme, paid off on the wordmark. Each card carries a reference frame for the key moment (a look, not the final shot). Tick the ones you want made, note your steer, and the prompt at the bottom carries it back so I can turn them into real moving clips. ★ = my pick in each group.",
+  stamp: "WorldFirst × Ant International · short-form reactive clips · ships 9:16 social + 16:9 · 20 Jun 2026",
+  spine: "<b>The rule at this length:</b> seller is the hero, the football beat is the metaphor, the brand is the last frame. <b>Guardrails:</b> no naming the tournament, the governing body or any player; no crests; brand lands as the final wordmark; blue-and-white; AI execution. <b>Why short beats long here:</b> the reactive pair can post the same night a match ends, which a hero film never can. Confirm the final restriction list with legal before locking.",
+  promptHeader: "road_to_worldfirst clips",
+  promptAction: "Make these as moving clips: build the reference frame, animate in Higgsfield (image to video), cut to 5 to 10s with the line and wordmark, ship 9:16 and 16:9.",
+  globalNote: { label: "Overall steer (optional)", placeholder: "tone, which lines to keep or kill, persona/market, whether you want a matching set or one-offs, sound ideas..." },
+  sections: [
+    { key:"matchcut", label:"Match-cut rhymes", sub:"One visual pun. A football beat hard-cut to the same shape in the seller's world. ~6 to 8s.", pick:1, notes:true, items:[
+      { name:"Boot → Box", rec:true, img:"img/c01.webp", meta:"~6s · 3-beat · the signature clip",
+        desc:"<p><b>The cut:</b> a boot strikes a ball at impact, hard cut, a hand slaps a label flat onto a parcel. Same thwack on the soundtrack.</p><p><b>Lands on:</b> the wordmark.</p>",
+        line:"“The Road to WorldFirst.”" },
+      { name:"The Through-Ball", img:"img/c02.webp", meta:"~7s · 2-beat",
+        desc:"<p><b>The cut:</b> a pass threads between defenders, cut, a parcel slides clean across a border line on a world map, same trajectory.</p><p><b>Lands on:</b> the wordmark over the arriving parcel.</p>",
+        line:"“Some passes cross the world.”" },
+      { name:"Back of the Net", img:"img/c03.webp", meta:"~6s · 2-beat · satisfying",
+        desc:"<p><b>The cut:</b> a ball hits the back of the net, the mesh ripples, cut to a phone where ‘payment received’ lands with the same ripple of light.</p><p><b>Lands on:</b> the wordmark.</p>",
+        line:"“Back of the net.”" },
+      { name:"Cleared", img:"img/c04.webp", meta:"~5s · 2-beat · fastest",
+        desc:"<p><b>The cut:</b> a referee's whistle blows, cut, a payment clears with a green tick. One sound carries both.</p><p><b>Lands on:</b> the wordmark.</p>",
+        line:"“Cleared.”" }
+    ]},
+    { key:"score", label:"Score & counter stings", sub:"Data as drama. A match number becomes a business number. ~6 to 8s.", pick:1, notes:true, items:[
+      { name:"Stoppage Time", rec:true, img:"img/c05.webp", meta:"~7s · counter · high energy",
+        desc:"<p><b>The cut:</b> a match clock ticks 90:01, 90:02, smash to an orders counter climbing, then ‘+1 market’.</p><p><b>Lands on:</b> the wordmark as the counter settles.</p>",
+        line:"“Every minute counts.”" },
+      { name:"The Scoreboard", img:"img/c06.webp", meta:"~6s · graphic",
+        desc:"<p><b>The cut:</b> a stadium scoreboard flips, but the figures are countries shipped and orders cleared, not a match score.</p><p><b>Lands on:</b> the wordmark replacing the score.</p>",
+        line:"“Read the real score.”" }
+    ]},
+    { key:"typo", label:"Typographic stings", sub:"Kinetic type. Pure design, no narrative. ~5 to 6s.", pick:1, notes:true, items:[
+      { name:"STEP. STEP. STEP.", rec:true, img:"img/c07.webp", meta:"~6s · kinetic type",
+        desc:"<p><b>The cut:</b> three stamped cuts, each a word over an image, a border, a sealed box, a cleared payment. STEP. STEP. STEP.</p><p><b>Lands on:</b> the final stamp, WORLDFIRST.</p>",
+        line:"“Step by step to first.”" },
+      { name:"First in the World", img:"img/c08.webp", meta:"~5s · title sting",
+        desc:"<p><b>The cut:</b> black. ‘First.’ Beat. ‘in the world.’ Beat.</p><p><b>Lands on:</b> the wordmark, where ‘first in the world’ and the brand name are the same thing.</p>",
+        line:"“First in the world.”" }
+    ]},
+    { key:"quiet", label:"Quiet one-liners", sub:"One image, one line, the name. Restraint. ~7 to 9s.", pick:1, notes:true, items:[
+      { name:"The Tunnel", rec:true, img:"img/c09.webp", meta:"~8s · cinematic",
+        desc:"<p><b>The cut:</b> a seller walks out of a dim warehouse into light, shot exactly like a player leaving the tunnel.</p><p><b>Lands on:</b> the wordmark as they step into the light.</p>",
+        line:"“Every road leads somewhere. Ours leads here.”" },
+      { name:"3am, Both", img:"img/c10.webp", meta:"~8s · intimate",
+        desc:"<p><b>The cut:</b> a phone glows at 3am, a seller awake, the glow holding both a pitch and a payment screen.</p><p><b>Lands on:</b> the wordmark.</p>",
+        line:"“Somewhere it's match day. Somewhere it's payday. For you, it's both.”" }
+    ]},
+    { key:"reactive", label:"Match-day reactive", sub:"Cut the night a match ends. The reason to go short instead of long. ~5 to 6s.", pick:1, notes:true, items:[
+      { name:"One Step Closer", img:"img/c11.webp", meta:"~5s · post-win · reactive",
+        desc:"<p><b>The cut:</b> restrained blue-and-white celebration, one quietly proud seller, no shouting.</p><p><b>Lands on:</b> the wordmark.</p>",
+        line:"“One step closer.”" },
+      { name:"Part of the Road", rec:true, img:"img/c12.webp", meta:"~6s · post-setback · the shareable one",
+        desc:"<p><b>The cut:</b> one still, dignified frame after a hard result. The moment every other sponsor goes quiet, this is what we say instead.</p><p><b>Lands on:</b> the wordmark, steady.</p>",
+        line:"“A setback is part of the road.”" }
+    ]}
+  ]
+};
+/* === DECK END === */
+
+const CHECK='<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>';
+const state={}, notes={};
+DECK.sections.forEach(s=>{ state[s.key]= new Set(); notes[s.key]={}; });
+
+document.getElementById('title').textContent=DECK.title||'Deck';
+document.getElementById('intro').textContent=DECK.intro||'';
+document.getElementById('stamp').textContent=DECK.stamp||'';
+document.getElementById('spine').innerHTML=DECK.spine||'';
+if(DECK.globalNote){ document.getElementById('globalWrap').style.display='block';
+  document.getElementById('gnoteLabel').textContent=DECK.globalNote.label||'Notes';
+  document.getElementById('gnote').placeholder=DECK.globalNote.placeholder||''; }
+
+const root=document.getElementById('sections');
+DECK.sections.forEach(s=>{
+  const h=document.createElement('h2'); h.innerHTML=`${s.label} <span class="ct" id="ct-${s.key}"></span>`; root.appendChild(h);
+  if(s.sub){ const p=document.createElement('p'); p.className='sub'; p.textContent=s.sub; root.appendChild(p); }
+  const box=document.createElement('div'); box.id='sec-'+s.key; root.appendChild(box);
+  s.items.forEach((o,i)=> box.appendChild(card(s,i,o)));
+});
+
+function card(s,i,o){
+  const el=document.createElement('div'); el.className='card'; el.dataset.k=s.key; el.dataset.i=i;
+  const rec=o.rec?'<span class="rec">★ rec</span>':'';
+  const tag=o.tag?`<span class="tag">${o.tag}</span>`:'';
+  const meta=o.meta?`<div class="meta">${o.meta}</div>`:'';
+  const img=o.img?`<img class="thumb" loading="lazy" src="${o.img}" alt="${o.name} reference frame">`:'';
+  const line=o.line?`<div class="line">${o.line}</div>`:'';
+  const note=s.notes?`<div class="note"><label>your note (optional)</label><textarea placeholder="note on this pick..."></textarea></div>`:'';
+  el.innerHTML=`${img}<div class="inner"><div class="row"><div class="tick">${CHECK}</div><div class="body"><div class="name">${o.name}${rec}${tag}</div>${meta}<div class="desc">${o.desc||''}</div>${line}${note}</div></div></div>`;
+  el.addEventListener('click',e=>{ if(e.target.tagName==='TEXTAREA')return; toggle(s,i,el); });
+  const ta=el.querySelector('textarea'); if(ta){ ta.addEventListener('click',e=>e.stopPropagation()); ta.addEventListener('input',e=>{ notes[s.key][i]=e.target.value; }); }
+  return el;
+}
+function toggle(s,i,el){
+  const set=state[s.key];
+  if(set.has(i)){ set.delete(i); el.classList.remove('sel'); }
+  else { set.add(i); el.classList.add('sel'); }
+  update();
+}
+function selCount(s){ return state[s.key].size; }
+function totalCount(){ return DECK.sections.reduce((t,s)=>t+selCount(s),0); }
+function update(){
+  DECK.sections.forEach(s=>{ const c=document.getElementById('ct-'+s.key); c.textContent=`${selCount(s)} selected`; c.className='ct'+(selCount(s)>0?' full':''); });
+  const total=totalCount(); const btn=document.getElementById('copy'); btn.disabled=total===0; btn.classList.remove('done'); btn.textContent='Copy prompt';
+  document.getElementById('status').innerHTML = total===0
+    ? 'Tick the clips you want made. No limits, the prompt carries whatever you pick.'
+    : `<b>${total}</b> clip${total===1?'':'s'} to make.`;
+}
+function buildPrompt(){
+  let L=['== '+(DECK.promptHeader||'deck')+' =='];
+  DECK.sections.forEach(s=>{
+    if(selCount(s)===0) return;
+    L.push(`${s.label}:`);
+    [...state[s.key]].forEach((i,n)=>{ const o=s.items[i]; const nt=notes[s.key][i]?` [note: ${notes[s.key][i].trim()}]`:''; L.push(`  ${n+1}. ${o.name}${nt}`); });
+  });
+  const g=DECK.globalNote? document.getElementById('gnote').value.trim():'';
+  if(g) L.push('STEER: '+g);
+  L.push('> These are the clips I want.');
+  if(DECK.promptAction) L.push('> '+DECK.promptAction);
+  return L.join('\n');
+}
+document.getElementById('copy').addEventListener('click',async()=>{
+  const txt=buildPrompt();
+  try{ await navigator.clipboard.writeText(txt); }catch(e){ const ta=document.createElement('textarea'); ta.value=txt; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove(); }
+  const b=document.getElementById('copy'); b.classList.add('done'); b.textContent='Copied · paste it to Claude'; setTimeout(()=>{ if(!b.disabled){b.classList.remove('done'); b.textContent='Copy prompt';} },2600);
+});
+update();
+</script>
+</body>
+</html>
